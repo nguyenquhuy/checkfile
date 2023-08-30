@@ -2,27 +2,33 @@
 <html>
 <body>
     <div>
-        <h1>Use Object URL</h1>
-        <input type="file" id="file-uploader" accept="images/*" >
+        <h1>Use Object URL for Videos</h1>
+        <input type="file" id="file-uploader" accept="video/*" >
         
-        <div id="image-grid">
+        <div id="video-container">
           
         </div>
     </div>
 
     <script>
         const fileUploader = document.getElementById('file-uploader');
-        const reader = new FileReader();
-        const imageGrid = document.getElementById('image-grid');
+        const videoContainer = document.getElementById('video-container');
 
         fileUploader.addEventListener('change', (event) => {
-        const files = event.target.files;
-        const file = files[0];
-        
-        const img = document.createElement('img');
-        imageGrid.appendChild(img);
-        img.src = URL.createObjectURL(file);
-        img.alt = file.name;
+            const files = event.target.files;
+            const file = files[0];
+            
+            const video = document.createElement('video');
+            video.controls = true;
+            videoContainer.appendChild(video);
+            
+            const videoURL = URL.createObjectURL(file);
+            video.src = videoURL;
+            
+            // Release the object URL when the video is no longer needed
+            video.addEventListener('ended', () => {
+                URL.revokeObjectURL(videoURL);
+            });
         });
     </script>
 </body>
